@@ -1,0 +1,14 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "title": "Required terraform validate evidence is missing",
+      "severity": "blocker",
+      "location": "modules/microservice/ (verification gate)",
+      "detail": "The task mandates the module pass `terraform validate` via the throwaway harness and that the review confirm the coder recorded 'Success! The configuration is valid.'. No such evidence is available on this pass: the module files are unchanged since the previous review (mtimes 19:16-19:18, prior review 19:22), there is no git repository (no commit message), and there is no coder report/notes/log under .agents/ (only microservice-plan.md and the prior review outputs). The permitted narrow spot-check `terraform fmt -check -recursive modules/microservice` passes (exit 0), but that is not a substitute for `terraform validate`, and re-running the validate harness is out of scope for review.",
+      "consequence": "The mandatory verification gate is unsatisfied; there is no confirmation the configuration actually validates, so approval cannot be granted even though the static read matches every plan requirement (a)-(i) and is internally consistent.",
+      "correction": "Run the validate harness (minimal-vars variant and the fully-enabled variant with create_ingress=true, create_pipeline=true, dummy connection/repo/bucket, and a non-empty policy_statements), record the exact 'Success! The configuration is valid.' output in the coder's final/commit message so the reviewer can read it, and delete the harness afterward."
+    }
+  ],
+  "reviewDoc": "/home/miguel-mozo/Documents/Review de crecimiento/Terraform iac/Core bancario migrado/.agents/tasks/microservice-review.md"
+}

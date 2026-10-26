@@ -1,0 +1,30 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  amiFamily: AL2023
+  amiSelectorTerms:
+    - alias: al2023@latest
+  role: ${node_role}
+  subnetSelectorTerms:
+%{ for subnet_id in subnet_ids ~}
+    - id: ${subnet_id}
+%{ endfor ~}
+  securityGroupSelectorTerms:
+    - tags:
+        aws:eks:cluster-name: ${cluster_name}
+  tags:
+    app.kubernetes.io/created-by: eks-${cluster_name}-karpenter
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 20Gi
+        volumeType: gp3
+        deleteOnTermination: true
+        encrypted: true
