@@ -1,0 +1,25 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+Core Bancario - Dev,VPC,dev,0.00,0.00,USD,No charge
+Core Bancario - Dev,"NAT Gateway (zonal, 1)",dev,35.10,421.20,USD,730h × $0.045 + 50GB × $0.045 = $35.10
+Core Bancario - Dev,VPC Flow Logs,dev,5.00,60.00,USD,10GB × $0.50/GB = $5.00
+Core Bancario - Dev,EKS Cluster (control plane),dev,73.00,876.00,USD,1 cluster × $0.1/h × 730h + 0 × t3.small × $0.0208/h × 730h = $73.00
+Core Bancario - Dev,EKS Worker Nodes (sistema t3.small + cargas via Karpenter spot),dev,36.77,441.22,USD,2 × t3.small (Linux) × 730h × $0.0208/h + 40GB gp3 × $0.08/GB = $36.77
+Core Bancario - Dev,ALB Public Internal (CloudFront origin),dev,22.27,267.18,USD,730h × $0.0225/h + 1 LCU × $0.008/LCU-h × 730h = $22.27
+Core Bancario - Dev,ALB Administrative Internal,dev,22.27,267.18,USD,730h × $0.0225/h + 1 LCU × $0.008/LCU-h × 730h = $22.27
+Core Bancario - Dev,CloudFront Distribution (portal),dev,1.74,20.85,USD,"1 dist × (50,000 req × $0.0000008 + 20GB × $0.085) = $1.74"
+Core Bancario - Dev,"Aurora PostgreSQL Writer (t4g.medium, solo writer)",dev,71.35,856.20,USD,"1 × t4g.medium (aurora-postgresql, Single-AZ) × $0.095/h × 730h + 20GB × $0.1/GB = $71.35"
+Core Bancario - Dev,"ElastiCache Redis (t4g.micro, 1 nodo)",dev,36.50,438.00,USD,1 × t4g.micro (redis) × $0.05/h × 730h = $36.50
+Core Bancario - Dev,S3 Bucket Objects,dev,1.22,14.64,USD,"50GB × $0.023/GB = $1.1500; 10,000 PUTs × $0.0000050 = $0.0500; 50,000 GETs × $0.0000004 = $0.0200"
+Core Bancario - Dev,ECR Repositories (6 microservicios),dev,1.00,12.00,USD,10GB × $0.10/GB = $1.00
+Core Bancario - Dev,"KMS Keys (Aurora, Redis, S3, DMS, Secrets)",dev,5.00,60.00,USD,5 keys × $1.00/mo = $5.00
+Core Bancario - Dev,KMS Requests,dev,3.00,36.00,USD,"1,000,000 requests × $0.0000030 = $3.0000"
+Core Bancario - Dev,"Secrets Manager (Aurora, DMS)",dev,1.20,14.40,USD,3 secrets × $0.40/mo = $1.20
+Core Bancario - Dev,CloudWatch Logs (aplicacion + addons),dev,15.00,180.00,USD,30GB × $0.50/GB = $15.00
+Core Bancario - Dev,CloudWatch Alarms,dev,1.50,18.00,USD,15 alarms × $0.10/mo = $1.50
+Core Bancario - Dev,SSM Parameters,dev,0.00,0.00,USD,No charge
+Core Bancario - Dev,DMS Replication Instance (migracion temporal),dev,228.84,2746.08,USD,1 × t3.medium × $0.308/h × 730h + 50GB gp3 × $0.08/GB = $228.84
+Core Bancario - Dev,DataSync VPC Endpoint (interface),dev,0.00,0.00,USD,Unknown type: vpc_endpoint
+Core Bancario - Dev,Data Transfer Out,dev,4.50,54.00,USD,"50 GB egress (tiered pricing, avg $0.0900/GB) = $4.50"
+Core Bancario - Dev,IAM,dev,0.00,0.00,USD,No charge
+Core Bancario - Dev,Subtotal Core Bancario - Dev,dev,565.26,6783.12,USD,Core Bancario - Dev @ 100%
+ALL,TOTAL dev,dev,565.26,6783.12,USD,All accounts @ 100% load

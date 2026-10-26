@@ -84,10 +84,10 @@ flow_log_retention_in_days = 30
 # Tags corporativos
 ###############################################
 common_tags = {
-  Ambiente         = "Produccion"
-  Proyecto         = "Core_Bancario"
-  Descripcion      = "Networking - VPC base - Prod"
-  Nombre           = "cb-prod-networking"
-  ManagedBy        = "terraform"
-  Repositorio      = "Core_Bancario_Infraestructura_IaC"
+  Ambiente    = "Produccion"
+  Proyecto    = "Core_Bancario"
+  Descripcion = "Networking - VPC base - Prod"
+  Nombre      = "cb-prod-networking"
+  ManagedBy   = "terraform"
+  Repositorio = "Core_Bancario_Infraestructura_IaC"
 }

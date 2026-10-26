@@ -1,0 +1,19 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+AGAT - Dev,VPC,dev,0.00,0.00,USD,No charge
+AGAT - Dev,"NAT Gateway (zonal, 1)",dev,35.10,421.20,USD,730h × $0.045 + 50GB × $0.045 = $35.10
+AGAT - Dev,VPC Flow Logs,dev,5.00,60.00,USD,10GB × $0.50/GB = $5.00
+AGAT - Dev,EKS Cluster (control plane),dev,73.00,876.00,USD,1 cluster × $0.1/h × 730h + 0 × t3.small × $0.0208/h × 730h = $73.00
+AGAT - Dev,EKS Worker Nodes (sistema t3.small + 2 pods via Karpenter spot),dev,16.78,201.41,USD,1 × t3.small (Linux) × 730h × $0.0208/h + 20GB gp3 × $0.08/GB = $16.78
+AGAT - Dev,ALB Internal (frontend + backend),dev,22.27,267.18,USD,730h × $0.0225/h + 1 LCU × $0.008/LCU-h × 730h = $22.27
+AGAT - Dev,"Aurora PostgreSQL Writer (t4g.medium, solo writer)",dev,71.35,856.20,USD,"1 × t4g.medium (aurora-postgresql, Single-AZ) × $0.095/h × 730h + 20GB × $0.1/GB = $71.35"
+AGAT - Dev,ECR Repositories (frontend + backend),dev,0.60,7.20,USD,6GB × $0.10/GB = $0.60
+AGAT - Dev,"KMS Keys (Aurora, Secrets)",dev,2.00,24.00,USD,2 keys × $1.00/mo = $2.00
+AGAT - Dev,KMS Requests,dev,1.50,18.00,USD,"500,000 requests × $0.0000030 = $1.5000"
+AGAT - Dev,Secrets Manager (Aurora),dev,0.40,4.80,USD,1 secrets × $0.40/mo = $0.40
+AGAT - Dev,CloudWatch Logs (aplicacion + addons),dev,10.00,120.00,USD,20GB × $0.50/GB = $10.00
+AGAT - Dev,CloudWatch Alarms,dev,1.00,12.00,USD,10 alarms × $0.10/mo = $1.00
+AGAT - Dev,SSM Parameters,dev,0.00,0.00,USD,No charge
+AGAT - Dev,Data Transfer Out,dev,2.70,32.40,USD,"30 GB egress (tiered pricing, avg $0.0900/GB) = $2.70"
+AGAT - Dev,IAM,dev,0.00,0.00,USD,No charge
+AGAT - Dev,Subtotal AGAT - Dev,dev,241.70,2900.40,USD,AGAT - Dev @ 100%
+ALL,TOTAL dev,dev,241.70,2900.40,USD,All accounts @ 100% load

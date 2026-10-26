@@ -1,0 +1,20 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+RTDA - Prod +50%,VPC,prod,0.00,0.00,USD,No charge
+RTDA - Prod +50%,"Kinesis Data Stream (ingesta, provisioned)",prod,65.70,788.40,USD,6 shards × 730h × $0.015/shard-h = $65.70
+RTDA - Prod +50%,Kinesis Data Firehose (raw delivery a S3),prod,21.75,261.00,USD,750GB × $0.029/GB = $21.75
+RTDA - Prod +50%,S3 Raw (landing),prod,21.12,253.44,USD,"750GB × $0.023/GB = $17.2500; 750,000 PUTs × $0.0000050 = $3.7500; 300,000 GETs × $0.0000004 = $0.1200"
+RTDA - Prod +50%,S3 Data Lake (curado),prod,36.60,439.20,USD,"1500GB × $0.023/GB = $34.5000; 300,000 PUTs × $0.0000050 = $1.5000; 1,500,000 GETs × $0.0000004 = $0.6000"
+RTDA - Prod +50%,Lake Formation (gobierno/permisos),prod,0.00,0.00,USD,Lake Formation governance/permissions - no direct charge
+RTDA - Prod +50%,Managed Service for Apache Flink (procesamiento),prod,489.30,5871.60,USD,6 KPU × 730h × $0.11/KPU-h = $481.80 + 75GB storage × $0.1/GB = $7.50; total $489.30
+RTDA - Prod +50%,Fraud Detector ML (1% del total),prod,1125.00,13500.00,USD,"15,000 ml predictions (tiered, avg $0.07500/pred) = $1125.00"
+RTDA - Prod +50%,Fraud Detector reglas (9% del total),prod,942.50,11310.00,USD,"135,000 rules predictions (tiered, avg $0.00698/pred) = $942.50"
+RTDA - Prod +50%,Lambda (generar evento de fraude),prod,0.20,2.43,USD,"75,000 req × $2e-07/req + 11,250 GB-s × $0.0000166667 = $0.2025"
+RTDA - Prod +50%,SNS (notificacion de fraude),prod,0.04,0.45,USD,"75,000 publishes × $0.0000005 = $0.0375"
+RTDA - Prod +50%,"KMS Keys (kinesis, s3, sns, fraud, cw)",prod,5.00,60.00,USD,5 keys × $1.00/mo = $5.00
+RTDA - Prod +50%,KMS Requests,prod,22.50,270.00,USD,"7,500,000 requests × $0.0000030 = $22.5000"
+RTDA - Prod +50%,CloudWatch Logs,prod,75.00,900.00,USD,150GB × $0.50/GB = $75.00
+RTDA - Prod +50%,CloudWatch Alarms,prod,2.00,24.00,USD,20 alarms × $0.10/mo = $2.00
+RTDA - Prod +50%,Data Transfer Out,prod,13.50,162.00,USD,"150 GB egress (tiered pricing, avg $0.0900/GB) = $13.50"
+RTDA - Prod +50%,IAM,prod,0.00,0.00,USD,No charge
+RTDA - Prod +50%,Subtotal RTDA - Prod +50%,prod,2820.21,33842.52,USD,RTDA - Prod +50% @ 100%
+ALL,TOTAL prod,prod,2820.21,33842.52,USD,All accounts @ 100% load

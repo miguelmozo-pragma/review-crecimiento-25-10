@@ -2,7 +2,7 @@
 
 Infraestructura como código (Terraform) para la migración del Core Bancario de **Banca Global S.A.S.** hacia una arquitectura *cloud-native* en AWS sobre Amazon EKS. El repositorio gestiona todo el ciclo de vida de la plataforma: red, cómputo, datos, exposición pública y la migración temporal de cargas desde el entorno on-premise.
 
-> **Alcance actual:** el proyecto se despliega de forma **local** (sin pipeline de CI/CD para la propia IaC) y, por ahora, únicamente sobre el ambiente **`prod`** en `us-west-2`. La estructura soporta `dev` y `qa`, pero sus `tfvars` se habilitan cuando se requieran.
+> **Alcance actual:** el proyecto se despliega de forma **local** (sin pipeline de CI/CD para la propia IaC) en `us-west-2`. Los tres ambientes (**`dev`**, **`qa`**, **`prod`**) cuentan con sus archivos de variables (`tfvars`) parametrizados por dimensionamiento.
 
 ---
 
@@ -83,7 +83,9 @@ Los pods leen credenciales de **Secrets Manager** y acceden a **Aurora** separan
 │   ├── data/                    # Aurora + Redis + S3
 │   ├── cloudfront/              # CloudFront → ALB interno (VPC Origin)
 │   ├── migration/               # DMS + DataSync (VPC endpoint + SG)
-│   └── environment/
+│   └── environment/             # Variables por ambiente (dev, qa, prod)
+│       ├── dev/{layer}/dev.tfvars
+│       ├── qa/{layer}/qa.tfvars
 │       └── prod/{layer}/prod.tfvars
 │
 └── .kiro/steering/              # Convenciones del proyecto (naming, seguridad, estructura)
@@ -149,22 +151,26 @@ networking → workload → data → apps → cloudfront → migration
 
 - Terraform >= 1.0.0
 - AWS CLI configurado (perfil `default` o el que corresponda)
-- Backend S3 de estado: `bgsas-prod-iac-terraform-state-core-bancario` (us-west-2)
+- Backend S3 de estado por ambiente: `bgsas-{env}-iac-terraform-state-core-bancario` (us-west-2)
 
 ### Desplegar un layer
+
+Sustituye `{env}` por `dev`, `qa` o `prod`:
 
 ```bash
 cd layers/<layer>
 
 terraform init \
-  -backend-config="bucket=bgsas-prod-iac-terraform-state-core-bancario" \
+  -backend-config="bucket=bgsas-{env}-iac-terraform-state-core-bancario" \
   -backend-config="key=<layer>/terraform.tfstate" \
   -backend-config="region=us-west-2" \
   -input=false -reconfigure
 
-terraform plan  -var-file=../environment/prod/<layer>/prod.tfvars -input=false
-terraform apply -var-file=../environment/prod/<layer>/prod.tfvars -input=false
+terraform plan  -var-file=../environment/{env}/<layer>/{env}.tfvars -input=false
+terraform apply -var-file=../environment/{env}/<layer>/{env}.tfvars -input=false
 ```
+
+> Cada ambiente usa su propio bucket de estado (`bgsas-dev-…`, `bgsas-qa-…`, `bgsas-prod-…`), que debe existir antes del primer `init`.
 
 ### Secretos
 
@@ -180,7 +186,7 @@ Las credenciales generadas (Aurora) se almacenan automáticamente en **Secrets M
 ### Acceso al cluster
 
 ```bash
-aws eks update-kubeconfig --name cb-prod-eks-core --region us-west-2
+aws eks update-kubeconfig --name cb-{env}-eks-core --region us-west-2
 kubectl get nodes
 ```
 
@@ -199,13 +205,37 @@ kubectl get nodes
 
 ## 8. Dimensionamiento por ambiente
 
-| Recurso                     | dev            | qa                | prod                  |
-|-----------------------------|----------------|-------------------|-----------------------|
-| AZs                         | 1              | 3                 | 3                     |
-| Pods por deployment         | 1              | 3                 | 3                     |
-| Aurora                      | 1 writer       | writer + reader   | writer + reader (xl)  |
-| ElastiCache Redis           | pequeña        | mediana           | grande (multi-AZ)     |
-| DMS replication instance    | pequeña        | mediana           | grande                |
+Definido en `layers/environment/{env}/{layer}/{env}.tfvars`:
+
+| Recurso                     | dev                       | qa                          | prod                        |
+|-----------------------------|---------------------------|-----------------------------|-----------------------------|
+| CIDR VPC                    | 10.10.0.0/16              | 10.20.0.0/16                | 10.0.0.0/16                 |
+| AZs (red)                   | 2 *                       | 3                           | 3                           |
+| EKS node group (sistema)    | t3.small (1)              | t3.medium (2)               | t3.medium (1)               |
+| Pods por deployment         | 1 (128m / 256Mi)          | 3 (256m / 512Mi)            | 3 (256m / 512Mi)            |
+| Aurora                      | t4g.medium, solo writer   | r6g.large, writer + reader  | r6g.xlarge, writer + reader |
+| ElastiCache Redis           | t4g.micro, 1 nodo         | t4g.medium, 2 (multi-AZ)    | r6g.large, 2 (multi-AZ)     |
+| DMS replication instance    | t3.medium (full-load)     | t3.large (full-load-and-cdc)| r6i.large (full-load-and-cdc)|
+| Pipelines CI/CD (apps)      | deshabilitados            | habilitados                 | habilitados                 |
+
+> \* El cómputo de `dev` usa 1 AZ, pero la **red** abarca 2 AZs porque los subnet groups de Aurora, EKS y ElastiCache exigen un mínimo de dos zonas de disponibilidad.
+
+---
+
+## Estimación de costos AWS
+
+El repositorio incluye ejercicios de estimación de costos (us-west-2, On-Demand) por ambiente y un escenario de crecimiento. Costo mensual estimado de producción: **~$2,009/mes** (sin contar DMS temporal de migración, ~$1,768/mes).
+
+| Escenario | Mensual | Anual | Archivo |
+|-----------|--------:|------:|---------|
+| dev | $565 | $6,783 | `estimacion_cb_dev.csv` |
+| qa | $1,213 | $14,558 | `estimacion_cb_qa.csv` |
+| prod | $2,009 | $24,105 | `estimacion_cb_prod.csv` |
+| prod +50% (crecimiento) | $3,061 | $36,733 | `estimacion_cb_prod_plus50.csv` |
+
+El driver de costo principal es **Aurora PostgreSQL** (writer + reader, ~50% del total). El análisis consolidado de las tres soluciones de la organización está en `../Estimacion_Costos_AWS_Consolidada.md`.
+
+> Estimaciones de planeación, no una factura garantizada. No incluyen free tier ni descuentos por compromiso (Savings Plans / RI), por lo que representan una cota superior conservadora.
 
 ---
 

@@ -1,0 +1,22 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+AGAT - Prod +50%,VPC,prod,0.00,0.00,USD,No charge
+AGAT - Prod +50%,"NAT Gateway (zonal, 1)",prod,59.85,718.20,USD,730h × $0.045 + 600GB × $0.045 = $59.85
+AGAT - Prod +50%,VPC Flow Logs,prod,22.50,270.00,USD,45GB × $0.50/GB = $22.50
+AGAT - Prod +50%,EKS Cluster (control plane),prod,73.00,876.00,USD,1 cluster × $0.1/h × 730h + 0 × t3.medium × $0.0416/h × 730h = $73.00
+AGAT - Prod +50%,EKS Worker Nodes (+50%: 3x t3.large via Karpenter),prod,207.41,2488.90,USD,3 × t3.large (Linux) × 730h × $0.0832/h + 105GB gp3 × $0.08/GB = $207.41
+AGAT - Prod +50%,ALB Internal (frontend + backend),prod,45.62,547.50,USD,730h × $0.0225/h + 5 LCU × $0.008/LCU-h × 730h = $45.62
+AGAT - Prod +50%,"Aurora PostgreSQL Writer (r6g.2xlarge, +50% tier)",prod,999.77,11997.24,USD,"1 × r6g.2xlarge (aurora-postgresql, Single-AZ) × $1.349/h × 730h + 150GB × $0.1/GB = $999.77"
+AGAT - Prod +50%,"Aurora PostgreSQL Reader (r6g.2xlarge, +50% tier)",prod,999.77,11997.24,USD,"1 × r6g.2xlarge (aurora-postgresql, Single-AZ) × $1.349/h × 730h + 150GB × $0.1/GB = $999.77"
+AGAT - Prod +50%,ECR Repositories (frontend + backend),prod,1.80,21.60,USD,18GB × $0.10/GB = $1.80
+AGAT - Prod +50%,"KMS Keys (Aurora, Secrets)",prod,2.00,24.00,USD,2 keys × $1.00/mo = $2.00
+AGAT - Prod +50%,KMS Requests,prod,22.50,270.00,USD,"7,500,000 requests × $0.0000030 = $22.5000"
+AGAT - Prod +50%,Secrets Manager (Aurora),prod,0.40,4.80,USD,1 secrets × $0.40/mo = $0.40
+AGAT - Prod +50%,CloudWatch Logs (aplicacion + addons),prod,90.00,1080.00,USD,180GB × $0.50/GB = $90.00
+AGAT - Prod +50%,CloudWatch Alarms,prod,2.50,30.00,USD,25 alarms × $0.10/mo = $2.50
+AGAT - Prod +50%,SSM Parameters,prod,0.00,0.00,USD,No charge
+AGAT - Prod +50%,Data Transfer Out,prod,33.75,405.00,USD,"375 GB egress (tiered pricing, avg $0.0900/GB) = $33.75"
+AGAT - Prod +50%,CodePipeline (frontend + backend),prod,2.00,24.00,USD,2 pipelines × $1.00/mo = $2.00
+AGAT - Prod +50%,CodeBuild,prod,3.75,45.00,USD,"general1.small, 750 min × $0.005/min = $3.75"
+AGAT - Prod +50%,IAM,prod,0.00,0.00,USD,No charge
+AGAT - Prod +50%,Subtotal AGAT - Prod +50%,prod,2566.62,30799.44,USD,AGAT - Prod +50% @ 100%
+ALL,TOTAL prod,prod,2566.62,30799.44,USD,All accounts @ 100% load

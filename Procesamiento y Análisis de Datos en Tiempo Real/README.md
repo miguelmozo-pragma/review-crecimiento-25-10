@@ -215,3 +215,28 @@ El código de la Lambda de evento de fraude se despliega **por fuera de Terrafor
 | Lambda memoria / timeout | 256 / 30 | 512 / 60 | 1024 / 60 |
 | Retención de logs (días) | 30 | 30 | 90 |
 | S3 lifecycle (días a IA) | 30 | 60 | 90 |
+
+---
+
+## Estimación de costos AWS
+
+El repositorio incluye ejercicios de estimación de costos (us-west-2, On-Demand) por ambiente y un escenario de crecimiento. Costo mensual estimado de producción: **~$1,929/mes**.
+
+| Escenario | Mensual | Anual | Archivo |
+|-----------|--------:|------:|---------|
+| dev | $334 | $4,008 | `estimacion_rtda_dev.csv` |
+| qa | $818 | $9,819 | `estimacion_rtda_qa.csv` |
+| prod | $1,929 | $23,150 | `estimacion_rtda_prod.csv` |
+| prod +50% (crecimiento) | $2,820 | $33,843 | `estimacion_rtda_prod_plus50.csv` |
+
+### Supuesto clave: pre-filtro de fraude
+
+El driver de costo de esta solución es **AWS Fraud Detector**. El modelo asume que un **pre-filtro de reglas en Flink descarta ~90% de las transacciones** evidentemente legítimas antes de invocar el detector; solo el 10% restante llega a Fraud Detector (y de ese 10%, la mayoría por reglas y una fracción por ML). Este patrón reduce el costo de producción de **~$11,954/mes (todas las transacciones al detector) a ~$1,929/mes (−84%)** sin degradar la capacidad de detección, siempre que las reglas de pre-filtrado estén bien calibradas.
+
+El resto del pipeline (Kinesis, Firehose, S3, Flink, Lake Formation) cuesta en conjunto ~$500/mes. El análisis consolidado de las tres soluciones está en `../Estimacion_Costos_AWS_Consolidada.md`.
+
+> Estimaciones de planeación, no una factura garantizada. No incluyen free tier ni descuentos por compromiso (Savings Plans / RI), por lo que representan una cota superior conservadora.
+
+---
+
+*Mantenido por el área de Soluciones Digitales. Documentación y comentarios en español; descripciones internas de módulos en inglés.*

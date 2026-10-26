@@ -9,6 +9,11 @@
 *.tfstate.*
 *.tfplan
 
+#other files
+cost_cache*
+*.code-workspace
+cost_analysis*
+
 # Crash log files
 crash.log
 

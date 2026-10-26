@@ -1,0 +1,20 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+RTDA - Dev,VPC,dev,0.00,0.00,USD,No charge
+RTDA - Dev,"Kinesis Data Stream (ingesta, provisioned)",dev,10.95,131.40,USD,1 shards × 730h × $0.015/shard-h = $10.95
+RTDA - Dev,Kinesis Data Firehose (raw delivery a S3),dev,2.18,26.10,USD,75GB × $0.029/GB = $2.18
+RTDA - Dev,S3 Raw (landing),dev,2.11,25.34,USD,"75GB × $0.023/GB = $1.7250; 75,000 PUTs × $0.0000050 = $0.3750; 30,000 GETs × $0.0000004 = $0.0120"
+RTDA - Dev,S3 Data Lake (curado),dev,3.66,43.92,USD,"150GB × $0.023/GB = $3.4500; 30,000 PUTs × $0.0000050 = $0.1500; 150,000 GETs × $0.0000004 = $0.0600"
+RTDA - Dev,Lake Formation (gobierno/permisos),dev,0.00,0.00,USD,Lake Formation governance/permissions - no direct charge
+RTDA - Dev,Managed Service for Apache Flink (procesamiento),dev,81.30,975.60,USD,1 KPU × 730h × $0.11/KPU-h = $80.30 + 10GB storage × $0.1/GB = $1.00; total $81.30
+RTDA - Dev,Fraud Detector ML (1% del total),dev,112.50,1350.00,USD,"1,500 ml predictions (tiered, avg $0.07500/pred) = $112.50"
+RTDA - Dev,Fraud Detector reglas (9% del total),dev,101.25,1215.00,USD,"13,500 rules predictions (tiered, avg $0.00750/pred) = $101.25"
+RTDA - Dev,Lambda (generar evento de fraude),dev,0.02,0.24,USD,"7,500 req × $2e-07/req + 1,125 GB-s × $0.0000166667 = $0.0203"
+RTDA - Dev,SNS (notificacion de fraude),dev,0.00,0.04,USD,"7,500 publishes × $0.0000005 = $0.0037"
+RTDA - Dev,"KMS Keys (kinesis, s3, sns, fraud, cw)",dev,5.00,60.00,USD,5 keys × $1.00/mo = $5.00
+RTDA - Dev,KMS Requests,dev,2.25,27.00,USD,"750,000 requests × $0.0000030 = $2.2500"
+RTDA - Dev,CloudWatch Logs,dev,10.00,120.00,USD,20GB × $0.50/GB = $10.00
+RTDA - Dev,CloudWatch Alarms,dev,1.00,12.00,USD,10 alarms × $0.10/mo = $1.00
+RTDA - Dev,Data Transfer Out,dev,1.80,21.60,USD,"20 GB egress (tiered pricing, avg $0.0900/GB) = $1.80"
+RTDA - Dev,IAM,dev,0.00,0.00,USD,No charge
+RTDA - Dev,Subtotal RTDA - Dev,dev,334.02,4008.24,USD,RTDA - Dev @ 100%
+ALL,TOTAL dev,dev,334.02,4008.24,USD,All accounts @ 100% load

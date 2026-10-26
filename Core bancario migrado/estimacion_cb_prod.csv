@@ -1,0 +1,28 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+Core Bancario - Prod,VPC,prod,0.00,0.00,USD,No charge
+Core Bancario - Prod,"NAT Gateway (zonal, 1)",prod,55.35,664.20,USD,730h × $0.045 + 500GB × $0.045 = $55.35
+Core Bancario - Prod,VPC Flow Logs,prod,15.00,180.00,USD,30GB × $0.50/GB = $15.00
+Core Bancario - Prod,EKS Cluster (control plane),prod,73.00,876.00,USD,1 cluster × $0.1/h × 730h + 0 × t3.medium × $0.0416/h × 730h = $73.00
+Core Bancario - Prod,EKS Worker Nodes (1x t3.medium sistema + Karpenter para 18 pods de cargas),prod,284.54,3414.53,USD,4 × t3.large (Linux) × 730h × $0.0832/h + 130GB gp3 × $0.08/GB = $284.54
+Core Bancario - Prod,ALB Public Internal (CloudFront origin),prod,39.78,477.42,USD,730h × $0.0225/h + 4 LCU × $0.008/LCU-h × 730h = $39.78
+Core Bancario - Prod,ALB Administrative Internal,prod,28.11,337.26,USD,730h × $0.0225/h + 2 LCU × $0.008/LCU-h × 730h = $28.11
+Core Bancario - Prod,CloudFront Distribution (portal),prod,43.25,519.00,USD,"1 dist × (1,000,000 req × $0.0000008 + 500GB × $0.085) = $43.25"
+Core Bancario - Prod,Aurora PostgreSQL Writer (r6g.xlarge),prod,502.75,6033.00,USD,"1 × r6g.xlarge (aurora-postgresql, Single-AZ) × $0.675/h × 730h + 100GB × $0.1/GB = $502.75"
+Core Bancario - Prod,Aurora PostgreSQL Reader (r6g.xlarge),prod,502.75,6033.00,USD,"1 × r6g.xlarge (aurora-postgresql, Single-AZ) × $0.675/h × 730h + 100GB × $0.1/GB = $502.75"
+Core Bancario - Prod,"ElastiCache Redis (r6g.large x2, multi-AZ)",prod,73.00,876.00,USD,2 × r6g.large (redis) × $0.05/h × 730h = $73.00
+Core Bancario - Prod,S3 Bucket Objects,prod,12.20,146.40,USD,"500GB × $0.023/GB = $11.5000; 100,000 PUTs × $0.0000050 = $0.5000; 500,000 GETs × $0.0000004 = $0.2000"
+Core Bancario - Prod,ECR Repositories (6 microservicios),prod,3.00,36.00,USD,30GB × $0.10/GB = $3.00
+Core Bancario - Prod,"KMS Keys (Aurora, Redis, S3, DMS, Secrets)",prod,5.00,60.00,USD,5 keys × $1.00/mo = $5.00
+Core Bancario - Prod,KMS Requests,prod,15.00,180.00,USD,"5,000,000 requests × $0.0000030 = $15.0000"
+Core Bancario - Prod,"Secrets Manager (Aurora, DMS)",prod,1.20,14.40,USD,3 secrets × $0.40/mo = $1.20
+Core Bancario - Prod,CloudWatch Logs (aplicacion + addons),prod,75.00,900.00,USD,150GB × $0.50/GB = $75.00
+Core Bancario - Prod,CloudWatch Alarms,prod,3.00,36.00,USD,30 alarms × $0.10/mo = $3.00
+Core Bancario - Prod,SSM Parameters,prod,0.00,0.00,USD,No charge
+Core Bancario - Prod,DMS Replication Instance (migracion temporal),prod,240.84,2890.08,USD,1 × r6i.large × $0.308/h × 730h + 200GB gp3 × $0.08/GB = $240.84
+Core Bancario - Prod,DataSync VPC Endpoint (interface),prod,0.00,0.00,USD,Unknown type: vpc_endpoint
+Core Bancario - Prod,Data Transfer Out,prod,27.00,324.00,USD,"300 GB egress (tiered pricing, avg $0.0900/GB) = $27.00"
+Core Bancario - Prod,CodePipeline (6 microservicios),prod,6.00,72.00,USD,6 pipelines × $1.00/mo = $6.00
+Core Bancario - Prod,CodeBuild,prod,3.00,36.00,USD,"general1.small, 600 min × $0.005/min = $3.00"
+Core Bancario - Prod,IAM,prod,0.00,0.00,USD,No charge
+Core Bancario - Prod,Subtotal Core Bancario - Prod,prod,2008.77,24105.24,USD,Core Bancario - Prod @ 100%
+ALL,TOTAL prod,prod,2008.77,24105.24,USD,All accounts @ 100% load

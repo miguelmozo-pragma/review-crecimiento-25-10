@@ -1,0 +1,22 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+AGAT - Prod,VPC,prod,0.00,0.00,USD,No charge
+AGAT - Prod,"NAT Gateway (zonal, 1)",prod,50.85,610.20,USD,730h × $0.045 + 400GB × $0.045 = $50.85
+AGAT - Prod,VPC Flow Logs,prod,15.00,180.00,USD,30GB × $0.50/GB = $15.00
+AGAT - Prod,EKS Cluster (control plane),prod,73.00,876.00,USD,1 cluster × $0.1/h × 730h + 0 × t3.medium × $0.0416/h × 730h = $73.00
+AGAT - Prod,EKS Worker Nodes (sistema t3.medium + 6 pods via Karpenter),prod,132.67,1592.06,USD,2 × t3.large (Linux) × 730h × $0.0832/h + 70GB gp3 × $0.08/GB = $132.67
+AGAT - Prod,ALB Internal (frontend + backend),prod,33.95,407.34,USD,730h × $0.0225/h + 3 LCU × $0.008/LCU-h × 730h = $33.95
+AGAT - Prod,Aurora PostgreSQL Writer (r6g.xlarge),prod,502.75,6033.00,USD,"1 × r6g.xlarge (aurora-postgresql, Single-AZ) × $0.675/h × 730h + 100GB × $0.1/GB = $502.75"
+AGAT - Prod,Aurora PostgreSQL Reader (r6g.xlarge),prod,502.75,6033.00,USD,"1 × r6g.xlarge (aurora-postgresql, Single-AZ) × $0.675/h × 730h + 100GB × $0.1/GB = $502.75"
+AGAT - Prod,ECR Repositories (frontend + backend),prod,1.20,14.40,USD,12GB × $0.10/GB = $1.20
+AGAT - Prod,"KMS Keys (Aurora, Secrets)",prod,2.00,24.00,USD,2 keys × $1.00/mo = $2.00
+AGAT - Prod,KMS Requests,prod,15.00,180.00,USD,"5,000,000 requests × $0.0000030 = $15.0000"
+AGAT - Prod,Secrets Manager (Aurora),prod,0.40,4.80,USD,1 secrets × $0.40/mo = $0.40
+AGAT - Prod,CloudWatch Logs (aplicacion + addons),prod,60.00,720.00,USD,120GB × $0.50/GB = $60.00
+AGAT - Prod,CloudWatch Alarms,prod,2.50,30.00,USD,25 alarms × $0.10/mo = $2.50
+AGAT - Prod,SSM Parameters,prod,0.00,0.00,USD,No charge
+AGAT - Prod,Data Transfer Out,prod,22.50,270.00,USD,"250 GB egress (tiered pricing, avg $0.0900/GB) = $22.50"
+AGAT - Prod,CodePipeline (frontend + backend),prod,2.00,24.00,USD,2 pipelines × $1.00/mo = $2.00
+AGAT - Prod,CodeBuild,prod,2.50,30.00,USD,"general1.small, 500 min × $0.005/min = $2.50"
+AGAT - Prod,IAM,prod,0.00,0.00,USD,No charge
+AGAT - Prod,Subtotal AGAT - Prod,prod,1419.07,17028.84,USD,AGAT - Prod @ 100%
+ALL,TOTAL prod,prod,1419.07,17028.84,USD,All accounts @ 100% load

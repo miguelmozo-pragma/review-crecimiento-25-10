@@ -2,7 +2,7 @@
 
 Infraestructura como código (Terraform) para la **Aplicación de Gestión Administrativa y Transaccional** de **Banca Global S.A.S.** Despliega sobre Amazon EKS una aplicación de 3 capas (frontend web, backend de microservicios y persistencia en Aurora PostgreSQL), con exposición **exclusivamente interna** y autenticación contra un **IdP externo**.
 
-> **Alcance actual:** el proyecto se despliega de forma **local** y, por ahora, únicamente sobre el ambiente **`prod`** en `us-west-2`. La estructura soporta `dev` y `qa`, pero sus `tfvars` se habilitan cuando se requieran.
+> **Alcance actual:** el proyecto se despliega de forma **local** en `us-west-2`. Los tres ambientes (**`dev`**, **`qa`**, **`prod`**) cuentan con sus archivos de variables (`tfvars`) parametrizados por dimensionamiento.
 >
 > Los módulos reutilizan los patrones del repositorio *Core Bancario migrado* (código de proyecto distinto: `agat`).
 
@@ -78,7 +78,9 @@ Los pods acceden a **Aurora** separando endpoint de **escritura (writer)** y **l
 │   ├── workload/                # EKS + addons + Karpenter
 │   ├── data/                    # Aurora PostgreSQL
 │   ├── apps/                    # Namespaces + microservicios + pipelines
-│   └── environment/
+│   └── environment/             # Variables por ambiente (dev, qa, prod)
+│       ├── dev/{layer}/dev.tfvars
+│       ├── qa/{layer}/qa.tfvars
 │       └── prod/{layer}/prod.tfvars
 │
 └── .kiro/steering/              # Convenciones del proyecto
@@ -138,27 +140,31 @@ networking → workload → data → apps
 
 - Terraform >= 1.0.0
 - AWS CLI configurado
-- Backend S3 de estado: `bgsas-prod-iac-terraform-state-gestion-admin` (us-west-2)
+- Backend S3 de estado por ambiente: `bgsas-{env}-iac-terraform-state-gestion-admin` (us-west-2)
 
 ### Desplegar un layer
+
+Sustituye `{env}` por `dev`, `qa` o `prod`:
 
 ```bash
 cd layers/<layer>
 
 terraform init \
-  -backend-config="bucket=bgsas-prod-iac-terraform-state-gestion-admin" \
+  -backend-config="bucket=bgsas-{env}-iac-terraform-state-gestion-admin" \
   -backend-config="key=<layer>/terraform.tfstate" \
   -backend-config="region=us-west-2" \
   -input=false -reconfigure
 
-terraform plan  -var-file=../environment/prod/<layer>/prod.tfvars -input=false
-terraform apply -var-file=../environment/prod/<layer>/prod.tfvars -input=false
+terraform plan  -var-file=../environment/{env}/<layer>/{env}.tfvars -input=false
+terraform apply -var-file=../environment/{env}/<layer>/{env}.tfvars -input=false
 ```
+
+> Cada ambiente usa su propio bucket de estado (`bgsas-dev-…`, `bgsas-qa-…`, `bgsas-prod-…`), que debe existir antes del primer `init`.
 
 ### Acceso al cluster
 
 ```bash
-aws eks update-kubeconfig --name agat-prod-eks-core --region us-west-2
+aws eks update-kubeconfig --name agat-{env}-eks-core --region us-west-2
 kubectl get nodes
 ```
 
@@ -180,12 +186,35 @@ Nunca se almacenan secretos en `tfvars`. Las credenciales generadas (Aurora) se 
 
 ## 8. Dimensionamiento por ambiente
 
-| Recurso                     | dev            | qa                | prod                  |
-|-----------------------------|----------------|-------------------|-----------------------|
-| AZs                         | 1              | 3                 | 3                     |
-| Pods por deployment         | 1              | 3                 | 3                     |
-| Memoria / CPU por pod       | 512 MB/256 mCPU| 512 MB/256 mCPU   | 1024 MB/512 mCPU      |
-| Aurora                      | 1 writer       | writer + reader   | writer + reader (xl)  |
+Definido en `layers/environment/{env}/{layer}/{env}.tfvars`:
+
+| Recurso                     | dev                      | qa                         | prod                        |
+|-----------------------------|--------------------------|----------------------------|-----------------------------|
+| CIDR VPC                    | 10.10.0.0/16             | 10.20.0.0/16               | 10.0.0.0/16                 |
+| AZs (red)                   | 2 *                      | 3                          | 3                           |
+| EKS node group (sistema)    | t3.small (1)             | t3.medium (2)              | t3.medium (1)               |
+| Pods por deployment         | 1 (128m / 256Mi)         | 3 (256m / 512Mi)           | 3 (256m / 512Mi)            |
+| Aurora                      | t4g.medium, solo writer  | r6g.large, writer + reader | r6g.xlarge, writer + reader |
+| Pipelines CI/CD (apps)      | deshabilitados           | habilitados                | habilitados                 |
+
+> \* El cómputo de `dev` usa 1 AZ, pero la **red** abarca 2 AZs porque los subnet groups de Aurora y EKS exigen un mínimo de dos zonas de disponibilidad.
+
+---
+
+## Estimación de costos AWS
+
+El repositorio incluye ejercicios de estimación de costos (us-west-2, On-Demand) por ambiente y un escenario de crecimiento. Costo mensual estimado de producción: **~$1,419/mes** — la más económica de las tres soluciones de la organización por ser estructuralmente más simple (2 microservicios, exposición interna, sin CloudFront/Redis/S3).
+
+| Escenario | Mensual | Anual | Archivo |
+|-----------|--------:|------:|---------|
+| dev | $242 | $2,900 | `estimacion_agat_dev.csv` |
+| qa | $779 | $9,344 | `estimacion_agat_qa.csv` |
+| prod | $1,419 | $17,029 | `estimacion_agat_prod.csv` |
+| prod +50% (crecimiento) | $2,567 | $30,799 | `estimacion_agat_prod_plus50.csv` |
+
+El driver de costo principal es **Aurora PostgreSQL** (writer + reader, ~71% del total). El análisis consolidado de las tres soluciones está en `../Estimacion_Costos_AWS_Consolidada.md`.
+
+> Estimaciones de planeación, no una factura garantizada. No incluyen free tier ni descuentos por compromiso (Savings Plans / RI), por lo que representan una cota superior conservadora.
 
 ---
 

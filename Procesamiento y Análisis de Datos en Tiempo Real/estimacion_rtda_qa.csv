@@ -1,0 +1,20 @@
+AWS Account,Service,Environment,Monthly cost,First 12 months total,Currency,Configuration summary
+RTDA - QA,VPC,qa,0.00,0.00,USD,No charge
+RTDA - QA,"Kinesis Data Stream (ingesta, provisioned)",qa,21.90,262.80,USD,2 shards × 730h × $0.015/shard-h = $21.90
+RTDA - QA,Kinesis Data Firehose (raw delivery a S3),qa,5.80,69.60,USD,200GB × $0.029/GB = $5.80
+RTDA - QA,S3 Raw (landing),qa,5.63,67.58,USD,"200GB × $0.023/GB = $4.6000; 200,000 PUTs × $0.0000050 = $1.0000; 80,000 GETs × $0.0000004 = $0.0320"
+RTDA - QA,S3 Data Lake (curado),qa,9.76,117.12,USD,"400GB × $0.023/GB = $9.2000; 80,000 PUTs × $0.0000050 = $0.4000; 400,000 GETs × $0.0000004 = $0.1600"
+RTDA - QA,Lake Formation (gobierno/permisos),qa,0.00,0.00,USD,Lake Formation governance/permissions - no direct charge
+RTDA - QA,Managed Service for Apache Flink (procesamiento),qa,163.10,1957.20,USD,2 KPU × 730h × $0.11/KPU-h = $160.60 + 25GB storage × $0.1/GB = $2.50; total $163.10
+RTDA - QA,Fraud Detector ML (1% del total),qa,300.00,3600.00,USD,"4,000 ml predictions (tiered, avg $0.07500/pred) = $300.00"
+RTDA - QA,Fraud Detector reglas (9% del total),qa,270.00,3240.00,USD,"36,000 rules predictions (tiered, avg $0.00750/pred) = $270.00"
+RTDA - QA,Lambda (generar evento de fraude),qa,0.05,0.65,USD,"20,000 req × $2e-07/req + 3,000 GB-s × $0.0000166667 = $0.0540"
+RTDA - QA,SNS (notificacion de fraude),qa,0.01,0.12,USD,"20,000 publishes × $0.0000005 = $0.0100"
+RTDA - QA,"KMS Keys (kinesis, s3, sns, fraud, cw)",qa,5.00,60.00,USD,5 keys × $1.00/mo = $5.00
+RTDA - QA,KMS Requests,qa,6.00,72.00,USD,"2,000,000 requests × $0.0000030 = $6.0000"
+RTDA - QA,CloudWatch Logs,qa,25.00,300.00,USD,50GB × $0.50/GB = $25.00
+RTDA - QA,CloudWatch Alarms,qa,1.50,18.00,USD,15 alarms × $0.10/mo = $1.50
+RTDA - QA,Data Transfer Out,qa,4.50,54.00,USD,"50 GB egress (tiered pricing, avg $0.0900/GB) = $4.50"
+RTDA - QA,IAM,qa,0.00,0.00,USD,No charge
+RTDA - QA,Subtotal RTDA - QA,qa,818.25,9819.00,USD,RTDA - QA @ 100%
+ALL,TOTAL qa,qa,818.25,9819.00,USD,All accounts @ 100% load
