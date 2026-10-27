@@ -6,6 +6,24 @@ Monorepo de infraestructura en **Terraform** para las soluciones cloud de Banca 
 
 ---
 
+## Contexto de la solución (C4 — Nivel 1)
+
+![Diagrama de Contexto C4 — Solución en la nube Banca Global](static_files/Diagramas%20review%20crecimiento-Contexto%20C4%20Solucion%20Cloud.png)
+
+El diagrama de contexto muestra la visión global de la plataforma en la nube y cómo se relacionan sus tres sistemas:
+
+- **Actores:** el *Cliente Externo* (consulta estado de cuenta por internet, HTTPS), el *Operador Bancario/Administrativo* (personal de la sede central y las 10 sedes departamentales) y el *Equipo TI / Operaciones*.
+- **Conectividad:** las sedes se conectan de forma segura mediante **VPN IPSec site-to-site**; el tráfico público entra por el **perímetro de red y seguridad** (NAT, WAF, concentrador VPN).
+- **Sistemas (las tres soluciones de este repo):**
+  - **Sistema Core Bancario** — procesa la lógica transaccional (créditos, recaudo, inversiones), estados de cuenta y administración.
+  - **Nuevo Módulo de Gestión Administrativa** — gestión de cuentas, autorizaciones de pago y administración interna.
+  - **Nuevo sistema de Procesamiento y Análisis en Tiempo Real** — analítica de streaming, detección de fraude y análisis de comportamiento.
+- **Observabilidad:** CloudWatch centraliza trazas, métricas y logs de la plataforma.
+
+Cada sistema cuenta además con sus propios diagramas C4 de nivel Container y Component en el `static_files/` de su respectiva carpeta.
+
+---
+
 ## Soluciones
 
 | Solución | Descripción | Stack principal | Prod (est.) |
