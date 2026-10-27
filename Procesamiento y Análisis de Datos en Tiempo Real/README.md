@@ -239,4 +239,4 @@ El resto del pipeline (Kinesis, Firehose, S3, Flink, Lake Formation) cuesta en c
 
 ---
 
-*Mantenido por el área de Soluciones Digitales. Documentación y comentarios en español; descripciones internas de módulos en inglés.*
+*Documentación y comentarios en español; descripciones internas de módulos en inglés.*

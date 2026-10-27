@@ -239,4 +239,4 @@ El driver de costo principal es **Aurora PostgreSQL** (writer + reader, ~50% del
 
 ---
 
-*Mantenido por el área de Soluciones Digitales. Documentación y comentarios en español; descripciones internas de módulos en inglés.*
+*Documentación y comentarios en español; descripciones internas de módulos en inglés.*

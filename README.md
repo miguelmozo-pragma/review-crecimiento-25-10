@@ -114,4 +114,4 @@ El análisis completo —desglose por servicio, supuestos, comparativa, proyecci
 
 ---
 
-*Mantenido por el área de Soluciones Digitales. Documentación en español; descripciones internas de módulos en inglés.*
+*Documentación en español; descripciones internas de módulos en inglés.*

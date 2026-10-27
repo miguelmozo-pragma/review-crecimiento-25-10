@@ -212,4 +212,4 @@ Las partidas fijas y predecibles (Aurora, control plane y nodos base de EKS, Fli
 
 ---
 
-*Documento preparado para el ejercicio de planeación de costos de Banca Global S.A.S. — área de Soluciones Digitales. Las estimaciones deben revalidarse contra el consumo real tras el primer trimestre en producción.*
+*Documento preparado para el ejercicio de planeación de costos de Banca Global S.A.S. Las estimaciones deben revalidarse contra el consumo real tras el primer trimestre en producción.*
