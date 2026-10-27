@@ -13,6 +13,10 @@
 cost_cache*
 *.code-workspace
 cost_analysis*
+Documentacion_Seccion4*
+*.config.kiro
+*resumen_solucion*
+.kiro/*
 
 # Crash log files
 crash.log
